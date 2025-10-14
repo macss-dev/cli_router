@@ -1,19 +1,16 @@
 name: cli_router
 description: >
-  Router for CLIs inspired by shelf_router that uses spaces between segments.
-  Supports cmd('route subroute', handler), mount('prefix', subRouter),
-  dynamic parameters <id>, GNU-style flags, and shelf-like middlewares.
-version: 0.0.1
+  Router for CLIs inspired by shelf_router that uses spaces between segments instead of /
+version: 0.0.2
 
 repository: https://github.com/macss-dev/cli_router
-homepage: https://macss.dev
+homepage: https://github.com/macss-dev/cli_router
 issue_tracker: https://github.com/macss-dev/cli_router/issues
-documentation: https://macss.dev/cli_router
+documentation: https://pub.dev/documentation/cli_router/latest/
 
 environment:
   sdk: ^3.8.1
 
-# Add regular dependencies here.
 # dependencies:
   # path: ^1.8.0
 

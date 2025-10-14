@@ -32,11 +32,13 @@ Future<void> main(List<String> args) async {
       root.printHelp(req.stdout, title: 'Help (root):');
       req.stdout.writeln('\nExamples:');
       req.stdout.writeln('  dart run example/example.dart users list');
-      req.stdout.writeln('  dart run example/example.dart orders process <id> --dry-run');
+      req.stdout.writeln(
+        '  dart run example/example.dart orders process <id> --dry-run',
+      );
     }),
     description: 'Shows general help',
   );
 
-  final code =  await root.run(args);
+  final code = await root.run(args);
   exit(code);
 }

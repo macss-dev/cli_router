@@ -27,16 +27,14 @@ In your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  cli_router: ^0.0.1
+  cli_router: ^0.0.2
 ```
 
-> If you're developing locally:
->
-> ```yaml
-> dependencies:
->   cli_router:
->     path: ../cli_router
-> ```
+Or, if you prefer the command line, you can use:
+
+```bash
+dart pub add cli_router
+```
 
 Run:
 
@@ -67,7 +65,7 @@ Future<int> main(List<String> args) async {
     ..cmd('use-case', handler((req) {
       req.stdout.writeln('OK from subrouter: module use-case');
     }));
-  cli.cmd('module', sub); // sugar for mount('module', sub)
+  cli.mount('module', sub);
 
   // Help
   cli.cmd('help', handler((req) {
@@ -95,7 +93,7 @@ dart run bin/main.dart module use-case --param1 1234 --param2 true --param3 "tex
 
 ---
 
-## 🏳️‍🌈 Flags and positionals
+## 🚩 Flags and positionals
 
 - `--k v`, `--k=v`, `-k v`, `-abc` (`a/b/c=true`), `--no-k` ⇒ `k=false`.
 - `--` marks the end of options; everything after it is raw positionals.
@@ -253,15 +251,5 @@ Available commands:
 
 ---
 
-## 🗺️ Suggested roadmap
-
-- `--help` per command with richer templates.
-- Autocompletion for Bash/Zsh/PowerShell.
-- Optional integration with `package:args` for declarative validations.
-- Command scaffolding generator (CLI that creates modules/routers).
-- Optional telemetry with export to JSON/Prometheus.
-
----
-
 ## 📄 License
-MIT © Cristian Cisneros — ccisne.dev
+MIT © @ccisnedev

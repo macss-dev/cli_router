@@ -9,7 +9,9 @@ CliRouter buildOrdersModule() {
       final id = req.param('orderId');
       final dryRun = req.flagBool('dry-run');
       final threads = req.flagInt('threads') ?? 1;
-      req.stdout.writeln('Orders.process(id=$id, dryRun=$dryRun, threads=$threads)');
+      req.stdout.writeln(
+        'Orders.process(id=$id, dryRun=$dryRun, threads=$threads)',
+      );
     }),
     description: 'Processes an order (options: --dry-run, --threads N)',
   );
@@ -36,7 +38,9 @@ CliRouter buildOrdersModule() {
     ..cmd(
       'monthly <yyyy-mm>',
       handler((req) {
-        req.stdout.writeln('Orders.report.monthly(month=${req.param('yyyy-mm')})');
+        req.stdout.writeln(
+          'Orders.report.monthly(month=${req.param('yyyy-mm')})',
+        );
       }),
       description: 'Monthly report',
     );

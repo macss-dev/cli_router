@@ -10,13 +10,13 @@ class CliRequest {
     required this.positionals,
     io.IOSink? stdout,
     io.IOSink? stderr,
-  })  : stdout = stdout ?? io.stdout,
-        stderr = stderr ?? io.stderr;
+  }) : stdout = stdout ?? io.stdout,
+       stderr = stderr ?? io.stderr;
 
   /// Original args that were passed to main()
   final List<String> originalArgs;
 
-  /// Command segments that matched (eg: ['module','use-case'])
+  /// Command segments that matched (eg: 'module','use-case')
   final List<String> matchedCommand;
 
   /// Parameters for dynamic segments (eg: {'id': '42'})

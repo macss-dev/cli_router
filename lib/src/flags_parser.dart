@@ -12,7 +12,9 @@ _FlagsParseResult _parseFlags(List<String> args) {
   bool parsing = true;
 
   String? takeNext(int i) =>
-      (i + 1 < args.length && !args[i + 1].startsWith('-')) ? args[i + 1] : null;
+      (i + 1 < args.length && !args[i + 1].startsWith('-'))
+      ? args[i + 1]
+      : null;
 
   for (int i = 0; i < args.length; i++) {
     final a = args[i];

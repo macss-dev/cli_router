@@ -31,7 +31,8 @@ class CliRouter {
     }
     if (target is! CliHandler) {
       throw ArgumentError(
-          'cmd(pattern, target): target must be a CliHandler or CliRouter');
+        'cmd(pattern, target): target must be a CliHandler or CliRouter',
+      );
     }
     _routes.add(_RouteEntry(_PathPattern.parse(pattern), target, description));
   }
@@ -47,12 +48,10 @@ class CliRouter {
 
   /// Runs the router with `args` (as passed to `main`).
   Future<int> run(
-    List<String> args,
-    {
-      io.IOSink? stdout,
-      io.IOSink? stderr
-    }
-  ) async {
+    List<String> args, {
+    io.IOSink? stdout,
+    io.IOSink? stderr,
+  }) async {
     return _dispatch(
       args,
       upstream: const [],
@@ -85,7 +84,9 @@ class CliRouter {
       sink.writeln('No commands registered.');
       return;
     }
-    final maxLen = cmds.map((c) => c.command.length).fold<int>(0, (a, b) => a > b ? a : b);
+    final maxLen = cmds
+        .map((c) => c.command.length)
+        .fold<int>(0, (a, b) => a > b ? a : b);
     sink.writeln('Available commands:');
     for (final c in cmds) {
       final pad = ' ' * (maxLen - c.command.length);
@@ -103,20 +104,21 @@ class CliRouter {
     required io.IOSink stderr,
     required List<String> original,
   }) async {
-  // 1) Determine how far the "route tokens" go before the flags.
+    // 1) Determine how far the "route tokens" go before the flags.
     final flagStart = _indexOfFirstFlag(args);
     final maxRouteTokens = flagStart < 0 ? args.length : flagStart;
 
-  // 2) Try the longest match against registered routes.
+    // 2) Try the longest match against registered routes.
     for (int j = maxRouteTokens; j >= 0; j--) {
       final candidate = args.take(j).toList();
       final match = _matchRoute(candidate);
       if (match != null) {
-    final immediatePositionals = flagStart < 0
-      ? const <String>[]
-      : args.sublist(j, flagStart); // positionals between route and flags
-        final parsed =
-            _parseFlags(flagStart < 0 ? const [] : args.sublist(flagStart));
+        final immediatePositionals = flagStart < 0
+            ? const <String>[]
+            : args.sublist(j, flagStart); // positionals between route and flags
+        final parsed = _parseFlags(
+          flagStart < 0 ? const [] : args.sublist(flagStart),
+        );
         final req = CliRequest(
           originalArgs: original,
           matchedCommand: candidate,
@@ -127,7 +129,7 @@ class CliRouter {
           stderr: stderr,
         );
 
-  // Compose middlewares (upstream + local)
+        // Compose middlewares (upstream + local)
         final allMW = [...upstream, ..._middlewares];
         var h = match.handler;
         for (final mw in allMW.reversed) {
@@ -137,7 +139,7 @@ class CliRouter {
       }
     }
 
-  // 3) If there's no direct route, try mounts by longest prefix.
+    // 3) If there's no direct route, try mounts by longest prefix.
     _Mount? best;
     int bestLen = -1;
     for (final m in _mounts) {
