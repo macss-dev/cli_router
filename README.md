@@ -252,4 +252,4 @@ Available commands:
 ---
 
 ## 📄 License
-MIT © @ccisnedev
+MIT © [ccisne.dev](https://www.ccisne.dev)
