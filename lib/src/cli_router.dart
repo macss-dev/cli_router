@@ -110,6 +110,8 @@ class CliRouter {
 
     // 2) Try the longest match against registered routes.
     for (int j = maxRouteTokens; j >= 0; j--) {
+      // Guard: empty route '' must only match genuinely empty args.
+      if (j == 0 && args.isNotEmpty) continue;
       final candidate = args.take(j).toList();
       final match = _matchRoute(candidate);
       if (match != null) {
