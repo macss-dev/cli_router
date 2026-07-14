@@ -70,8 +70,11 @@ void main() {
       });
 
       final result = await _run(router, ['--help']);
-      expect(result.exitCode, equals(64),
-          reason: 'flag-only args should not match empty route');
+      expect(
+        result.exitCode,
+        equals(64),
+        reason: 'flag-only args should not match empty route',
+      );
       expect(result.stdout, isNot(contains('BANNER')));
     });
 
@@ -83,8 +86,11 @@ void main() {
       });
 
       final result = await _run(router, ['target', 'get']);
-      expect(result.exitCode, equals(64),
-          reason: 'positional args should not match empty route');
+      expect(
+        result.exitCode,
+        equals(64),
+        reason: 'positional args should not match empty route',
+      );
       expect(result.stdout, isNot(contains('BANNER')));
     });
 
