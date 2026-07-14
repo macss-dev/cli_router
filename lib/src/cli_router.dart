@@ -137,9 +137,12 @@ class CliRouter {
       final candidate = args.take(j).toList();
       final match = _matchRoute(candidate);
       if (match != null) {
-        final immediatePositionals = flagStart < 0
-            ? const <String>[]
-            : args.sublist(j, flagStart); // positionals between route and flags
+        // Everything between the matched route and the first flag is a
+        // positional — including when the invocation carries no flags at all.
+        final immediatePositionals = args.sublist(
+          j,
+          flagStart < 0 ? args.length : flagStart,
+        );
         final parsed = _parseFlags(
           flagStart < 0 ? const [] : args.sublist(flagStart),
         );

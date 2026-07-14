@@ -11,6 +11,9 @@ and the project adheres to [Semantic Versioning](https://semver.org/).
 - `ListedCommand` now carries the route metadata the router already had and used to discard: `positionals` (the names of the `<param>` segments, in order) and `module` (the mount the command was registered under).
 - `ListedCommand`, `CliNotFound` and `CliNotFoundHandler` are exported from `package:cli_router/cli_router.dart`.
 
+### Fixed
+- Positionals after the matched route were dropped when the invocation carried no flags (`help math` reached the handler with an empty `positionals`). They are now captured whether or not a flag follows.
+
 ### Changed
 - Minor version bump: `^0.0.z` permits no upgrade under Dart's caret semantics, so `0.0.x` releases pinned consumers to an exact patch. From `^0.1.0` on, consumers receive compatible updates without editing their pubspec.
 
