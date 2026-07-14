@@ -44,6 +44,10 @@ class _PathPattern {
     return true;
   }
 
+  /// Names of the `<param>` segments, in declaration order.
+  List<String> get positionalNames =>
+      segments.where((s) => s.isParam).map((s) => s.name).toList();
+
   @override
   String toString() =>
       segments.map((s) => s.isParam ? '<${s.name}>' : s.literal).join(' ');
