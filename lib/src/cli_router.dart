@@ -16,8 +16,12 @@ part 'route_entry.dart';
 
 /// Main router.
 class CliRouter {
-  CliRouter();
+  /// [onNotFound] takes over reporting of unmatched invocations, for this
+  /// router and every subrouter mounted under it. Without it, the router falls
+  /// back to printing its own listing to stderr and returning 64.
+  CliRouter({CliNotFoundHandler? onNotFound}) : _onNotFound = onNotFound;
 
+  final CliNotFoundHandler? _onNotFound;
   final List<_RouteEntry> _routes = [];
   final List<_Mount> _mounts = [];
   final List<CliMiddleware> _middlewares = [];
@@ -61,15 +65,28 @@ class CliRouter {
     );
   }
 
-  /// Lists all routes (includes subrouters) and descriptions.
-  List<ListedCommand> listCommands({String prefix = ''}) {
+  /// Lists all routes (includes subrouters) with their description, positional
+  /// parameters, and the mount they belong to.
+  List<ListedCommand> listCommands({String prefix = '', String? module}) {
     final out = <ListedCommand>[];
     for (final r in _routes) {
-      out.add(ListedCommand('$prefix${r.pattern}', r.description));
+      out.add(
+        ListedCommand(
+          '$prefix${r.pattern}',
+          r.description,
+          positionals: r.pattern.positionalNames,
+          module: module,
+        ),
+      );
     }
     for (final m in _mounts) {
-      final pfx = '$prefix${_segmentsToString(m.prefix)} ';
-      out.addAll(m.router.listCommands(prefix: pfx));
+      final mountName = _segmentsToString(m.prefix);
+      out.addAll(
+        m.router.listCommands(
+          prefix: '$prefix$mountName ',
+          module: module == null ? mountName : '$module $mountName',
+        ),
+      );
     }
     return out;
   }
@@ -103,7 +120,12 @@ class CliRouter {
     required io.IOSink stdout,
     required io.IOSink stderr,
     required List<String> original,
+    CliNotFoundHandler? inheritedNotFound,
   }) async {
+    // A subrouter reports not-found the way the router it was mounted under
+    // does, unless it was given a hook of its own.
+    final onNotFound = _onNotFound ?? inheritedNotFound;
+
     // 1) Determine how far the "route tokens" go before the flags.
     final flagStart = _indexOfFirstFlag(args);
     final maxRouteTokens = flagStart < 0 ? args.length : flagStart;
@@ -160,10 +182,16 @@ class CliRouter {
         stdout: stdout,
         stderr: stderr,
         original: original,
+        inheritedNotFound: onNotFound,
       );
     }
 
     // 4) Nothing matched
+    if (onNotFound != null) {
+      return await onNotFound(
+        CliNotFound(args: original, stdout: stdout, stderr: stderr),
+      );
+    }
     stderr.writeln('Command not found or invalid usage.');
     stderr.writeln();
     printHelp(stderr, title: 'Help:');

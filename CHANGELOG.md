@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.1.0] - 2026-07-13
+### Added
+- `CliRouter({CliNotFoundHandler? onNotFound})`: an application can now decide how an unmatched invocation is reported and with which exit code. The hook receives a `CliNotFound` (original args + sinks) and is inherited by every mounted subrouter. Presentation belongs to the application; the router only knows *what* failed to match.
+- `ListedCommand` now carries the route metadata the router already had and used to discard: `positionals` (the names of the `<param>` segments, in order) and `module` (the mount the command was registered under).
+- `ListedCommand`, `CliNotFound` and `CliNotFoundHandler` are exported from `package:cli_router/cli_router.dart`.
+
+### Changed
+- Minor version bump: `^0.0.z` permits no upgrade under Dart's caret semantics, so `0.0.x` releases pinned consumers to an exact patch. From `^0.1.0` on, consumers receive compatible updates without editing their pubspec.
+
+Nothing breaks: with no `onNotFound` supplied, the router still prints `Command not found or invalid usage.` plus its listing to stderr and returns 64.
+
 ## [0.0.3] - 2026-04-18
 ### Fixed
 - Empty route `''` no longer acts as catch-all. It now only matches when `args` is genuinely empty, preventing it from intercepting flag-only (`--help`) or positional args before mounts are evaluated.

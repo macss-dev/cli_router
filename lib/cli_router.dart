@@ -9,4 +9,12 @@
 library;
 
 export 'src/cli_router.dart'
-    show CliRouter, CliRequest, CliHandler, CliMiddleware, handler;
+    show
+        CliRouter,
+        CliRequest,
+        CliHandler,
+        CliMiddleware,
+        CliNotFound,
+        CliNotFoundHandler,
+        ListedCommand,
+        handler;
